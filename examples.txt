@@ -1,0 +1,23 @@
+(succ (succ zero))
+(num-reduce (succ (succ zero)) succ zero)
+num-reduce
+(num-reduce (succ (succ zero)) #(succ (succ %)) zero)
+(my-cons 1 (my-cons 3 my-nil))
+(list-reduce (my-cons 1 (my-cons 3 my-nil)) + 7)
+(list-reduce (my-cons 1 (my-cons 3 my-nil)) #(my-cons [%1] %2) 7)
+(list-reduce (my-cons 1 (my-cons 3 my-nil)) #(my-cons [%1] %2) (my-cons 7 my-nil))
+(def esim (node2 6 (node3 5 leaf leaf leaf) (node2 3 leaf (node2 4 leaf leaf))))
+esim
+tree-map
+(tree-map esim #(+ 1 %))
+esim
+(tree-map esim (fn [x] "jfoiewajfoiew"))
+(tree-map esim (fn [x] (str x "jfoiewajfoiew" x)))
+(source tree-map)
+(tree-reduce esim #(+ %2 %3) #(+ %2 %3 %4) 1)
+(tree-reduce esim + + 0)
+(tree-reduce esim #(cons %1 (concat %2 %3)) #(cons %1 (concat %2 %3 %4)) '())
+(tree-reduce esim #(conj %1 (concat %2 %3)) #(conj %1 (concat %2 %3 %4)) '())
+(tree-reduce esim #(conj (concat %2 %3) %1) #(conj (concat %2 %3 %4) %1) '())
+(tree-reduce esim #(conj (concat %2 %3) %1) #(conj (concat %2 %3 %4) %1) [])
+(tree-reduce esim (fn [a b c] (+ a b)) (fn [a b c d] (+ a b)) 0)
