@@ -105,6 +105,16 @@ cat vaylat.csv | wc -l
 (count vaylat)
 ```
 
+> Elementin järjestysnumero muistiin
+
+```bash
+cat -n vaylat.csv
+```
+
+```clojure
+(map vector (range) vaylat)
+```
+
 > Kenttä 2 (eli väylän tunnus) väylistä
 
 ```bash
@@ -215,10 +225,29 @@ sort -t'|' -k3,3 vaylat.csv | join -t'|' -1 3 -2 2 - vaylat.sorted
 
 ## Sort-muunnokset
 
+Clojuressa on sort-by, jota voi yleensä emuloida sort-muunnoksilla.
+
+> Monennellako rivillä on aakkosjärjestyksessä ensimmäinen väylä?
+
 ```bash
+cat -n vaylat.csv | sort -k2 | head -1 | awk '{print $1}'
 ```
 
 ```clojure
+(->> vaylat (map vector (range)) (sort-by second) (first) (first))
 ```
 
+> väylät syvyysjärjestyksessä
+
+```bash
+# metodi 1
+grep '(.*)' vaylat.csv | sort -n -t'(' -k2
+# metodi 2
+sed -ne 's/^.*(\(.*\)).*$/\1|&/p' vaylat.csv | sort -n | sed 's/^[^|]*|//'
+```
+
+```clojure
+(sort-by #(Float/parseFloat (subs % (inc (.indexOf % "(")) (.indexOf % ")")))
+         vaylat)
+```
 
