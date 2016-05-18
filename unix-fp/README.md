@@ -14,6 +14,8 @@ Käynnistä clojure-tulkki ja kirjoita:
 Jotkin Unixin komentotulkin ja funktionaalisten kielten lausekkeet
 muistuttavat toisiaan:
 
+> Montako riviä, joilla ensin "hie" ja sitten "no"?
+
 ```bash
 cat foo | grep 'hie.*no' | wc -l
 ```
@@ -33,6 +35,8 @@ cat foo | grep 'hie.*no' | wc -l
 => Komentotulkin tietojenkäsittely muistuttaa kovasti modernia
 sekvenssin käsittelyä funktionaalisessa ohjelmointikielessä!
 
+> Käännä rivien sisältö ja lisää eteen "upponalle "
+
 ```bash
 cat foo | rev | sed 's/^/upponalle /'
 ```
@@ -47,6 +51,8 @@ cat foo | rev | sed 's/^/upponalle /'
 
 Näistä pitäisi yhdistellä kaikki hienommat jutut!
 
+> Rivit 7-20 väylistä, rivi 32 väylistä
+
 ```bash
 head -20 vaylat.csv | tail -13
 sed -ne 32p vaylat.csv
@@ -58,6 +64,8 @@ sed -ne 32p vaylat.csv
 (nth vaylat 32)
 ```
 
+> Väylät, joiden nimessä "Oulu"
+
 ```bash
 grep Oulu vaylat.csv
 ```
@@ -65,6 +73,8 @@ grep Oulu vaylat.csv
 ```clojure
 (filter #(.contains % "Oulu") vaylat)
 ```
+
+> Muuta "Oulu" "Koulu":ksi väylien nimissä
 
 ```bash
 sed 's/Oulu/Koulu/g' vaylat.csv
@@ -74,12 +84,16 @@ sed 's/Oulu/Koulu/g' vaylat.csv
 (map #(clojure.string/replace % "Oulu" "Koulu") vaylat)
 ```
 
+> Avaa välilyönnin erottamat asiat rivillä listoiksi
+
 ```bash
 cat vaylat.csv | tr ' ' \\012
 ```
 ```clojure
 (mapcat (clojure.string/split % #" ") vaylat)
 ```
+
+> Järjestä väylät aakkosjärjestykseen, kuinka monta väylää on?
 
 ```bash
 sort vaylat.csv
@@ -91,6 +105,8 @@ cat vaylat.csv | wc -l
 (count vaylat)
 ```
 
+> Kenttä 2 (eli väylän tunnus) väylistä
+
 ```bash
 cut -d'|' -f2 vaylat.csv
 ```
@@ -100,6 +116,8 @@ cut -d'|' -f2 vaylat.csv
 (map second vaylat-rel)
 ```
 
+> Kuinka monta aliväylää on kullakin pääväylällä
+
 ```bash
 cut -d'|' -f3 vaylat.csv | sort | uniq -c
 ```
@@ -107,6 +125,8 @@ cut -d'|' -f3 vaylat.csv | sort | uniq -c
 ```clojure
 (frequencies (map #(get % 2) vaylat-rel))
 ```
+
+> Uniikit pääväylät
 
 ```bash
 cut -d'|' -f3 vaylat.csv | sort | uniq -d
@@ -122,6 +142,8 @@ Joukkoalgebra on superkätevää.  Ei typeriä sisäkkäisiä silmukoita!
 Miellyttävää korkean tason koodia, helppoa ymmärtää.  Komentotulkissa
 käsiteltävien tiedostojen pitää olla sortattuja.
 
+> Yhdistä väylien nimet vaylat.csv:sta ja foo:sta, poista duplikaatit
+
 ```bash
 cut -d'|' -f1 vaylat.csv | sort -u - foo
 ```
@@ -131,6 +153,8 @@ cut -d'|' -f1 vaylat.csv | sort -u - foo
 (set/union (map first vaylat-rel) (lines "foo"))
 ```
 
+> Väylien nimet, jotka löytyvät myös foo:sta
+
 ```bash
 sort foo > foo.sorted
 cut -d'|' -f1 vaylat.csv | sort | comm -12 - foo.sorted
@@ -139,6 +163,8 @@ cut -d'|' -f1 vaylat.csv | sort | comm -12 - foo.sorted
 ```clojure
 (set/intersection (set (map first vaylat-rel)) (set (lines "foo")))
 ```
+
+> foo:n rivit, jotka eivät ole väylien nimiä
 
 ```bash
 cut -d'|' -f1 vaylat.csv | sort | comm -23 foo.sorted -
@@ -155,6 +181,8 @@ käytännössä mitä vain isoista tietomääristä.  Vaatimus, että tiedot
 täytyy pitää sortattuina, hankaloittaa relaatioalgebraa jonkin verran
 komentotulkissa.
 
+> Väylät, joiden pääväylä on 96
+
 ```bash
 awk -F '|' '$3 == "96"' vaylat.csv
 ```
@@ -162,6 +190,8 @@ awk -F '|' '$3 == "96"' vaylat.csv
 ```clojure
 (filter #(= (get % 2) "96") vaylat-rel)
 ```
+
+> Kaikki tiedot väylistä, joiden nimi löytyy foo:sta
 
 ```bash
 sort -t'|' -k1,1 vaylat.csv | join -t'|' - foo.sorted
@@ -172,6 +202,8 @@ sort -t'|' -k1,1 vaylat.csv | join -t'|' - foo.sorted
   (filter #(foo-set (first %)) vaylat-rel))
 ```
 
+> kaikki väylät yhdistettynä pääväylänsä tietoihin
+
 ```bash
 sort -t'|' -k2,2 vaylat.csv > vaylat.sorted
 sort -t'|' -k3,3 vaylat.csv | join -t'|' -1 3 -2 2 - vaylat.sorted 
@@ -181,22 +213,11 @@ sort -t'|' -k3,3 vaylat.csv | join -t'|' -1 3 -2 2 - vaylat.sorted
 (set/join vaylat-rel vaylat-rel {2 1})
 ```
 
-## Listaoperaatiot
-
-Joskus listojen järjestys on tärkeä osa tietoa.  Eli jotain tietoa ei
-säilytetä rivin sisällössä, vaan tieto on koodattu siihen, missä kohtaa
-rivi on tiedostossa.
-
-```bash
-```
-
-```clojure
-```
-
 ## Sort-muunnokset
 
 ```bash
 ```
+
 ```clojure
 ```
 
