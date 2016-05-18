@@ -45,10 +45,99 @@ cat foo | rev | sed 's/^/upponalle /'
 
 ## Peruskauraa
 
+Näistä pitäisi yhdistellä kaikki hienommat jutut!
 
+```bash
+head -20 vaylat.csv | tail -13
+sed -ne 32p vaylat.csv
+```
+
+```clojure
+(def vaylat (lines "vaylat.csv"))
+(->> vaylat (take 20) (take-last 13))
+(nth vaylat 32)
+```
+
+```bash
+grep Oulu vaylat.csv
+```
+
+```clojure
+(filter #(.contains % "Oulu") vaylat)
+```
+
+```bash
+sed 's/Oulu/Koulu/g' vaylat.csv
+```
+
+```clojure
+(map #(clojure.string/replace % "Oulu" "Koulu") vaylat)
+```
+
+```bash
+cat vaylat.csv | tr ' ' \\012
+```
+```clojure
+(mapcat (clojure.string/split % #" ") vaylat)
+```
+
+```bash
+sort vaylat.csv
+cat vaylat.csv | wc -l
+```
+
+```clojure
+(sort vaylat)
+(count vaylat)
+```
+
+```bash
+cut -d'|' -f2 vaylat.csv
+```
+
+```clojure
+(def vaylat-rel (map #(clojure.string/split % #"\|") vaylat))
+(map second vaylat-rel)
+```
+
+```bash
+cut -d'|' -f3 vaylat.csv | sort | uniq -c
+```
+
+```clojure
+(frequencies (map #(get % 2) vaylat-rel))
+```
+
+```bash
+cut -d'|' -f3 vaylat.csv | sort | uniq -d
+```
+
+```clojure
+(into '() (set (map #(get % 2) vaylat-rel)))
+```
 
 ## Joukkoalgebra
 
+Joukkoalgebra on superkätevää.  Ei typeriä sisäkkäisiä silmukoita!
+Miellyttävää korkean tason koodia, helppoa ymmärtää.  Komentotulkissa
+käsiteltävien tiedostojen pitää olla sortattuja.
+
+```bash
+cut -d'|' -f1 vaylat.csv
+```
+
+```clojure
+```
+
 ## Relaatioalgebra
 
+## Listaoperaatiot
+
 ## Sort-muunnokset
+
+```bash
+```
+```clojure
+```
+
+
