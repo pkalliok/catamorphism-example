@@ -156,12 +156,42 @@ täytyy pitää sortattuina, hankaloittaa relaatioalgebraa jonkin verran
 komentotulkissa.
 
 ```bash
+awk -F '|' '$3 == "96"' vaylat.csv
+```
+
+```clojure
+(filter #(= (get % 2) "96") vaylat-rel)
+```
+
+```bash
+sort -t'|' -k1,1 vaylat.csv | join -t'|' - foo.sorted
+```
+
+```clojure
+(let [foo-set (set (lines "foo"))]
+  (filter #(foo-set (first %)) vaylat-rel))
+```
+
+```bash
+sort -t'|' -k2,2 vaylat.csv > vaylat.sorted
+sort -t'|' -k3,3 vaylat.csv | join -t'|' -1 3 -2 2 - vaylat.sorted 
+```
+
+```clojure
+(set/join vaylat-rel vaylat-rel {2 1})
+```
+
+## Listaoperaatiot
+
+Joskus listojen järjestys on tärkeä osa tietoa.  Eli jotain tietoa ei
+säilytetä rivin sisällössä, vaan tieto on koodattu siihen, missä kohtaa
+rivi on tiedostossa.
+
+```bash
 ```
 
 ```clojure
 ```
-
-## Listaoperaatiot
 
 ## Sort-muunnokset
 
