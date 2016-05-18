@@ -123,13 +123,43 @@ Miellyttävää korkean tason koodia, helppoa ymmärtää.  Komentotulkissa
 käsiteltävien tiedostojen pitää olla sortattuja.
 
 ```bash
-cut -d'|' -f1 vaylat.csv
+cut -d'|' -f1 vaylat.csv | sort -u - foo
+```
+
+```clojure
+(require '[clojure.set :as set])
+(set/union (map first vaylat-rel) (lines "foo"))
+```
+
+```bash
+sort foo > foo.sorted
+cut -d'|' -f1 vaylat.csv | sort | comm -12 - foo.sorted
+```
+
+```clojure
+(set/intersection (set (map first vaylat-rel)) (set (lines "foo")))
+```
+
+```bash
+cut -d'|' -f1 vaylat.csv | sort | comm -23 foo.sorted -
+```
+
+```clojure
+(set/difference (set (lines "foo")) (set (map first vaylat-rel)))
+```
+
+## Relaatioalgebra
+
+Relaatioalgebra on tuttua SQL-tietokannoista.  Sillä voi selvittää
+käytännössä mitä vain isoista tietomääristä.  Vaatimus, että tiedot
+täytyy pitää sortattuina, hankaloittaa relaatioalgebraa jonkin verran
+komentotulkissa.
+
+```bash
 ```
 
 ```clojure
 ```
-
-## Relaatioalgebra
 
 ## Listaoperaatiot
 
