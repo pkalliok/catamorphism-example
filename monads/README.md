@@ -55,8 +55,8 @@
     laskentaympäristön sisällä: (m a, a -> m b) -> m b
 * bind vastaa apply-funktiota, mutta sillä on mahdollisuus kutsua
   argumenttifunktiotaan "haluamallaan tavalla"
-  * esim. Maybe-monadi ei kutsukaan funktiota ollenkaan jos syötteeksi
-    annettu arvo on Empty
+  * esim. Maybe-monadi ei kutsukaan funktiota ollenkaan jos bind:n
+    syötteeksi annettu arvo on Empty
 
 ## Mistä kaikista syistä monadeja käytetään?
 

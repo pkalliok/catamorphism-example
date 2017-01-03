@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [monads.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest test-tree-tag
+  (let [tagged (tree-tag example-tree :sometag)]
+    (is (= (->> tagged :right :left :content) [:sometag 'right-left]))))
+
