@@ -5,6 +5,8 @@
 
 (defrecord tree [content left right])
 
+; helpers
+
 (def example-tree
   (tree. 'root
          (tree. 'left
@@ -15,6 +17,15 @@
                 (tree. 'right-right
                        nil
                        (tree. 'right-right-right nil nil)))))
+
+(defn print-tree [tree]
+  (defn print-tree-rec [tree level]
+    (if (nil? tree) nil
+      (do
+        (println (clojure.string/join (take level (repeat " "))) (:content tree))
+        (print-tree-rec (:left tree) (inc level))
+        (print-tree-rec (:right tree) (inc level)))))
+  (print-tree-rec tree 0))
 
 ; simple pure example: tagging with a static tag
 

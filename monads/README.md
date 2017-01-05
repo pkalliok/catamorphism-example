@@ -121,6 +121,9 @@
     "monadin sisällä"
 * Joitain avukkeita pystyy kuitenkin kirjoittamaan pelkästään
   monadirajapinnan avulla, esim. lift, map, sequence, jne
+* Tärkeä hyöty: monadirajapinnan avulla voi kirjoittaa
+  _monadimuuntimia_, eli funktioita, jotka saavat argumentikseen yhden
+  monadin ja tuottavat siitä uuden monadin (jossa on lisäpalveluita)
 
 ## License
 
