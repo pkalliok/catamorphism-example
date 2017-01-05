@@ -4,8 +4,18 @@
   * Monet tosin huonoja (vaikeaselkoisia) mutta hyviäkin on paljon
 * Tämä esittely yrittää panostaa kysymykseen "miksi" eli milloin
   halutaan käyttää monadia
-* Pakko tehdä jotain, mitä on vaikeaa/rumaa tehdä ilman monadia, muuten
-  pointti ei tule esiin
+* Pakko tehdä jotain, mitä on vaikeaa/rumaa tehdä ilman monadia
+  * Triviaalit esimerkit eivät alleviivaa tarpeeksi, mitä hyötyä monadin
+    käytöstä on
+
+## Muita johdantoja (jonkinlainen valikoima)
+
+* Clojurelle: https://github.com/khinsen/monads-in-clojure/blob/master/PART1.md
+* Haskellille: https://www.haskell.org/tutorial/monads.html
+* JavaScriptille:
+  https://blog.jcoglan.com/2011/03/05/translation-from-haskell-to-javascript-of-selected-portions-of-the-best-introduction-to-monads-ive-ever-read/
+* Parserit, kiva esimerkki monadien hyödyllisyydestä:
+  http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
 
 ## Mikä on monadi?
 
