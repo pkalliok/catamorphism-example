@@ -1,6 +1,7 @@
 (ns monads.core
   (:require [clojure.algo.monads :refer
-             [domonad with-monad state-m update-state maybe-m state-t]]))
+             [defmonad domonad with-monad
+              state-m update-state maybe-m state-t]]))
 
 (defrecord tree [content left right])
 
