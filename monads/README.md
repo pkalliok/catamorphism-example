@@ -18,6 +18,22 @@
   erilaisia "laskentaympäristöjä".  Niitä kutsutaan monadeiksi.
 * Eli: ohjelmoijan kannalta monadi === laskentaympäristö.
 
+## Hiukan terminologiaa
+
+* Monadisen tyypin arvot "sisältävät" jonkin tavallisen arvon (kuten
+  listan, luvun, ...).
+  * Monadi on siis parametrinen tyyppi (generics)
+* Riippuu monadista, miten se esittää "sisältämänsä" tavalliset arvot,
+  ja tämä on monadin sisäinen asia (ei vaikuta monadia käyttävään
+  koodiin)
+  * Esim. jatkemonadi esittää arvon _arvo_ funktiona ``(fn [f] (f
+    arvo))``
+  * Toisaalta indeterminismimonadissa jokainen operaatio palauttaa
+    tosiasiassa monta arvoa (jotka esitetään yleensä laiskana listana)
+* monadissa olevaa arvoa kutsutaan _monadiseksi arvoksi_ (tyyppiä m a)
+  ja funktiota, joka palauttaa monadisen arvon, _monadiseksi
+  operaatioksi_ (tyyppiä a -> m b).
+
 ## Mihin monadeja kannattaa käyttää?
 
 * Monadilla saa siistityksi jossain erikoisessa laskentaympäristössä
@@ -57,6 +73,11 @@
   argumenttifunktiotaan "haluamallaan tavalla"
   * esim. Maybe-monadi ei kutsukaan funktiota ollenkaan jos bind:n
     syötteeksi annettu arvo on Empty
+* bind ja result takaavat yhdessä, että monadin sisällä pystyy laskemaan
+  mitä tahansa
+  * jotta pystyy tekemään monadilla jotain muuta kuin tavallista
+    laskentaa, pitää käyttää monadin "lisäpalveluita"
+  * myös arvon saaminen ulos monadista on "lisäpalvelu" :)
 
 ## Mistä kaikista syistä monadeja käytetään?
 
