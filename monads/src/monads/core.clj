@@ -115,12 +115,28 @@
   [m-result (fn [value] (fn [count k] (k (inc count) value)))
    m-bind (fn [mvalue f]
             (fn [count k]
-              (mvalue (inc count)
-                      (fn [count2 value] ((f value) (inc count) k)))))])
+              (mvalue count (fn [count2 value] ((f value) (inc count2) k)))))])
 
-(defn run-count-m [mvalue] (mvalue 0 vector))
+(defn run-count-m [mvalue]
+  (let [result (mvalue 0 vector)]
+    (do (println "Took" (first result) "steps")
+        (second result))))
 
-(defn step-over? [bound]
+(defn check-count [bound interrupt-value]
   (fn [count k]
-    (k (inc count) (> count bound))))
+    (if (> count bound)
+      ['too-many interrupt-value]
+      (k count count))))
+
+; step-bounded tree-size
+
+(defn tree-size-bounded [tree bound]
+  (with-monad count-m
+    (defn tree-size-rec [tree]
+      (if (nil? tree) (m-result 1)
+        (domonad [_ (check-count bound 'unknown)
+                  left-size (tree-size-rec (:left tree))
+                  right-size (tree-size-rec (:right tree))]
+          (+ left-size right-size)))))
+  (run-count-m (tree-size-rec tree)))
 
