@@ -126,5 +126,70 @@ arvoille, monet muut (filter, reduce, scan) eivät.
 
 ## Mikä FRP:ssä on kätevää?
 
+Käytännöllisemmästä periaatteellisempaan:
 
+- tietyt temporaalikombinaattorit ovat tosi käteviä
+- asynkronisten tapahtumien ketjutus on sama kuin virtojen flatMap aka
+  chain aka monadinen bind, ja siksi siisti ohjelmoida sillä
+- jos oikeasti aikoo pysyä funktionaalisena, niin tämä ja IO-monadi ovat
+  käytännössä ainoat vaihtoehdot
 
+### Kätevät temporaalikombinaattorit
+
+Virrat tarjoavat joka FRP-frameworkissa sellaisia kombinaattoreita kuin
+debounce, throttle ja bufferingThrottle.  Näiden kirjoittaminen käsin on
+vaivalloista.
+
+```
+> function chars(delay, str) { return b.sequentially(delay, str.split('')); }
+> function now() { return new Date().getTime(); }
+> chars(30,'aaaaa').merge(chars(34,'bbbbb')).merge(chars(41,'cccc')).
+		map(c > => [now(), c]).log();
+[ 1499158052989, 'a' ]
+[ 1499158052991, 'b' ]
+[ 1499158052999, 'c' ]
+[ 1499158053020, 'a' ]
+[ 1499158053025, 'b' ]
+[ 1499158053041, 'c' ]
+[ 1499158053051, 'a' ]
+[ 1499158053061, 'b' ]
+[ 1499158053082, 'a' ]
+[ 1499158053083, 'c' ]
+[ 1499158053096, 'b' ]
+[ 1499158053113, 'a' ]
+[ 1499158053124, 'c' ]
+[ 1499158053131, 'b' ]
+<end>
+> chars(30,'aaaaa').merge(chars(34,'bbbbb')).merge(chars(41,'cccc')).
+		map(c => [now(), c]).bufferWithTime(20).log();
+[ [ 1499158221455, 'a' ], [ 1499158221459, 'b' ], [ 1499158221466, 'c' ] ]
+[ [ 1499158221485, 'a' ], [ 1499158221494, 'b' ] ]
+[ [ 1499158221507, 'c' ], [ 1499158221516, 'a' ] ]
+[ [ 1499158221529, 'b' ] ]
+[ [ 1499158221546, 'a' ], [ 1499158221548, 'c' ] ]
+[ [ 1499158221563, 'b' ], [ 1499158221577, 'a' ] ]
+[ [ 1499158221589, 'c' ], [ 1499158221597, 'b' ] ]
+<end>
+> chars(30,'aaaaa').merge(chars(34,'bbbbb')).merge(chars(41,'cccc')).
+		map(c => [now(), c]).debounce(15).log();
+[ 1499158117590, 'c' ]
+[ 1499158117653, 'b' ]
+[ 1499158117724, 'b' ]
+<end>
+```
+
+### Asynkronisten tapahtumien ketjutus
+
+Virrat ovat kuin lupauksia (promises) mutta palauttavat useampia arvoja.
+Lupauksia voi ketjuttaa: kun yksi lupaus saa arvonsa, käynnistetään
+toinen.  Se on hyödyllistä, koska näin kahdesta lupauksesta (joista
+toisen arvo riippuu toisesta) saa yhden, joka saa arvon, kun koko
+laskenta on tehty.
+
+Ketjutus vastaa funktionaalista kompositiota, mutta sellaisille
+funktioille, joiden palautustyyppi ei ole pelkkä arvo vaan monadinen
+arvo (esim. lupaus arvosta, arvojen lista, arvojen virta).  FRP:ssä
+ratkaistaan asynkronisuuden ongelmat tuottamalla kaikesta virtoja.
+
+```
+```
