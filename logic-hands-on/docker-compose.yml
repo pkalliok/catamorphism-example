@@ -1,0 +1,28 @@
+version: '2'
+services:
+        fuseki-data:
+                image: busybox
+                volumes:
+                        - /fuseki
+        fuseki:
+                image: stain/jena-fuseki
+                depends_on:
+                        - fuseki-data
+                volumes_from:
+                        - fuseki-data
+                ports:
+                        - 8830:3030
+                environment:
+                        ADMIN_PASSWORD: logic-programming-test
+        fuseki-loader:
+                image: stain/jena-fuseki
+                depends_on:
+                        - fuseki-data
+                volumes_from:
+                        - fuseki-data
+                volumes:
+                        - ./data:/staging
+                command: ./tdbloader --desc=/staging/redirects_fi.ttl.gz
+                environment:
+                        ADMIN_PASSWORD: logic-programming-test
+
