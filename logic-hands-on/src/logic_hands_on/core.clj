@@ -1,6 +1,5 @@
 (ns logic-hands-on.core
-  (:require [clojure.core.logic :as l]
-            [clojure.core.logic.fd :as fd]))
+  (:require [clojure.core.logic :as l]))
 
 (defn oy-fp-puffi-spec [spec]
   (l/fresh [start]
