@@ -41,4 +41,46 @@ argumentteja x, y ja z.
 - ns. point-free notation on olennaisesti funktioiden muuttamista
   kombinaattorilausekkeiksi
 
+## Kombinaattorilausekkeesta lambda-lausekkeeksi
+
+Jos meillä on jokin tällainen vaikeaselkoinen kombinaattoreilla
+kirjoitettu funktio:
+
+```
+sqDiff = (W (*) .) . (-)
+```
+
+Siitä saa konkreettisen (muuttujia sisältävän) määritelmän
+eeta-laventamalla siihen argumentteja:
+
+```
+sqDiff a b c d e f = ((W (*) .) . (-)) a b c d e f
+```
+
+Sitten voidaan sieventää kombinaattoreiden (ja muiden funktioiden)
+määritelmien perusteella:
+
+```
+-- komposition (.) määritelmän perusteella
+sqDiff a b c d e f = (W (*) .) ((-) a) b c d e f
+-- kun (-) ottaa argumenttinsa
+sqDiff a b c d e f = (W (*) .) (a -) b c d e f
+-- kun (.) ottaa argumenttinsa
+sqDiff a b c d e f = (W (*) . (a -)) b c d e f
+-- komposition (.) määritelmän perusteella
+sqDiff a b c d e f = (W (*)) ((a -) b) c d e f
+-- kun (-) ottaa argumenttinsa
+sqDiff a b c d e f = (W (*)) (a - b) c d e f
+-- kun W ottaa argumenttinsa
+sqDiff a b c d e f = (W (*) (a - b)) c d e f
+-- W-kombinaattorin määritelmän perusteella
+sqDiff a b c d e f = ((*) (a - b) (a - b)) c d e f
+```
+
+Lopuksi voi eeta-supistaa pois tarpeettomat argumentit:
+
+```
+sqDiff a b = ((*) (a - b) (a - b))
+```
+
 
