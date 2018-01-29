@@ -75,12 +75,16 @@ sqDiff a b c d e f = (W (*)) (a - b) c d e f
 sqDiff a b c d e f = (W (*) (a - b)) c d e f
 -- W-kombinaattorin määritelmän perusteella
 sqDiff a b c d e f = ((*) (a - b) (a - b)) c d e f
+-- kun (*) ottaa argumenttinsa
+sqDiff a b c d e f = (((a - b) *) (a - b)) c d e f
+-- kun (*) ottaa argumenttinsa
+sqDiff a b c d e f = ((a - b) * (a - b)) c d e f
 ```
 
 Lopuksi voi eeta-supistaa pois tarpeettomat argumentit:
 
 ```
-sqDiff a b = ((*) (a - b) (a - b))
+sqDiff a b = ((a - b) * (a - b))
 ```
 
 
