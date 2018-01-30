@@ -1,4 +1,6 @@
 
+import Control.Monad (ap)
+
 data Expr = Ap Expr Expr | K | S | I | B | C | W | Var String deriving(Show,Eq)
 
 rewrite (Ap (Ap K x) y) = x
@@ -10,5 +12,5 @@ rewrite (Ap (Ap W x) y) = Ap (Ap x y) y
 rewrite (Ap x y) = Ap (rewrite x) y
 rewrite x = x
 
-norm = takeWhile (\ term -> term /= rewrite term) . iterate rewrite
+norm = takeWhile (ap (/=) rewrite) . iterate rewrite
 
